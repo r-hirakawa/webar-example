@@ -77,20 +77,26 @@ export default {
   },
   methods: {
   },
-  // 
+  // Vue コンポーネントから離れるとき、A-Frame コンテンツをアンロードする.
   // https://router.vuejs.org/ja/guide/advanced/navigation-guards.html#%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E5%86%85%E3%82%AC%E3%83%BC%E3%83%89
   beforeRouteLeave (to, from, next) {
-    // Scene の再生を停止
+    // <a-scene> の再生を停止
     var scene = document.querySelector('a-scene');
     if (scene) {
       scene.pause();
-      console.log('scene paused.');
+      console.log('AR Scene paused.');
     }
-    // Video 要素削除
-    var video = document.querySelector('#arjs-video');
-    if (video) {
-      video.remove();
-      console.log('video removed.');
+    // <video> 要素の削除
+    var arVideo = document.querySelector('#arjs-video');
+    if (arVideo) {
+      arVideo.remove();
+      console.log('AR <video> element removed.');
+    }
+    // DebugUI 要素の削除
+    var arDebugUI = document.querySelector('#arjsDebugUIContainer');
+    if (arDebugUI) {
+      arDebugUI.remove();
+      console.log('AR DebugUI removed.');
     }
     next();
   },
