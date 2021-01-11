@@ -14,6 +14,7 @@ Vue.config.ignoredElements = [
   'a-marker',
   'a-nft',
   'a-camera',
+  'a-cursor',
   'a-image',
   'a-text',
   'a-plane'
