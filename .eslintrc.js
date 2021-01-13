@@ -1,17 +1,35 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
+    es6: true,
   },
-  'extends': [
+  extends: [
+    'eslint:recommended',
     'plugin:vue/essential',
-    'eslint:recommended'
+    'prettier',
+    'prettier/vue',
   ],
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    sourceType: 'module',
   },
+  plugins: [
+    'vue',
+  ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-  }
-}
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'vue/max-attributes-per-line': [
+      'error',
+      {
+        singleline: 1,
+        multiline: {
+          max: 1,
+          allowFirstLine: false,
+        },
+      },
+    ],
+  },
+};
