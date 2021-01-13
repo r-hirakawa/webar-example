@@ -67,10 +67,8 @@ export default {
   },
   data: () => ({
     // WebAR コンテンツの表示状態
-    //   Navigation  : トップ(ろっくんナビゲーション)
-    //   quiz  : メニュー(クイズに参加)
-    //   photo : メニュー(写真を撮る)
-    //   video : メニュー(よるマチ！を見る)
+    //   Navigation : トップ(ろっくんナビゲーション)
+    //   WatchVideo : メニュー選択後のコンテンツ（動画を見る）
     currentComponent: 'Navigation',
   }),
   methods: {
@@ -85,8 +83,8 @@ export default {
        */
       const AFRAME = window.AFRAME;
 
-      let me = this;
       // クリックイベントハンドラを登録
+      let me = this;
       AFRAME.registerComponent('click-event', {
         init: function () {
           var button = this.el;
@@ -98,7 +96,7 @@ export default {
           });
         }
       });
-      // クリックイベントハンドラを登録
+      // 動画再生ボタンのイベントハンドラを登録
       AFRAME.registerComponent('video-play', {
         init: function () {
           var button = this.el;
@@ -111,7 +109,7 @@ export default {
           });
         }
       });
-      // クリックイベントハンドラを登録
+      // 動画一時停止ボタンのイベントハンドラを登録
       AFRAME.registerComponent('video-pause', {
         init: function () {
           var button = this.el;

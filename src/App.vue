@@ -1,7 +1,7 @@
 <template>
   <v-app>
 
-    <!-- ヘッダ領域 -->
+    <!-- ヘッダ -->
     <v-app-bar
       app
       color="ITVBlue"
@@ -11,6 +11,7 @@
       <v-toolbar-title>App</v-toolbar-title>
     </v-app-bar>
 
+    <!-- ナビゲーション・ドロワー -->
     <v-navigation-drawer
       v-model="drawer"
       fixed
@@ -33,14 +34,16 @@
       </v-list>
     </v-navigation-drawer>
 
-    <!-- コンテンツ領域 -->
+    <!-- コンテンツ -->
     <v-main>
       <router-view />
     </v-main>
 
+    <!-- フッタ -->
     <v-bottom-navigation
       app
-      color="ITVBlue"
+      color="white"
+      background-color="ITVBlue"
     >
       <v-btn
         v-for="item in menu"
