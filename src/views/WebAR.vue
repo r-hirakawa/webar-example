@@ -1,9 +1,10 @@
 <template>
   <div class="container">
+
     <a-scene
       vr-mode-ui="enabled: false;"
-      loading-screen="enabled: true;"
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;"
+      loading-screen="enabled: false;"
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
       embedded
       id="scene"
     >
@@ -11,18 +12,25 @@
       <!-- a-assets: preload/cache するアセットの定義 -->
       <a-assets>
         <!-- ろっくん画像 -->
-        <img
-            id="rockn"
-            src="ar/rockn.png"
-        />
-        <!-- DigiComロゴ画像 -->
-<!--
-        <img
-            id="digicom-logo"
-            src="ar/digicom-logo.png"
-        />
--->
+        <img id="rockn" src="ar/rockn.png" />
+        <img id="play" src="ar/play.png" />
+        <img id="pause" src="ar/pause.png" />
+        <!-- 花火動画 -->
+        <video
+          id="fireworks"
+          src="https://cdn.aframe.io/videos/fireworks.mp4"
+          preload="none"
+          loop="true"
+          crossOrigin="anonymous"
+          webkit-playsinline
+          playsinline
+        ></video>
       </a-assets>
+
+      <!-- a-camera: 視点カーソル -->
+      <a-camera>
+        <a-cursor color="yellow"></a-cursor>
+      </a-camera>
 
       <!-- a-marker: マーカーを検知してオブジェクトをレンダリング -->
       <a-marker
@@ -30,55 +38,86 @@
         type="pattern"
         preset="custom"
         url="ar/marker.patt"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-        custom-marker-events
       >
-        <a-image
-            src="#rockn"
-            position="0 0 0"
-            scale="3 3 3"
-            class="clickable"
-            rotation="-90 0 0"
-        ></a-image>
+        <component :is="this.currentComponent"></component>
       </a-marker>
 
-      <!-- a-nft: マーカーではなく画像を検知してオブジェクトをレンダリング -->
-<!--
-      <a-nft
-        type="nft"
-        url="ar/item.jpg"
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance=".01"
-        smoothThreshold="5">
-
-        <a-image
-            src="#digicom-logo"
-            position="0 0 0"
-            scale="3 3 3"
-            class="clickable"
-            rotation="-90 0 0"
-        ></a-image>
-      </a-nft>
--->
-
-      <a-entity camera></a-entity>
     </a-scene>
 
   </div>
 </template>
 
 <script>
+import Navigation from '../components/webar/Navigation.vue'
+import WatchVideo from '../components/webar/WatchVideo.vue'
+
 export default {
   name: 'WebAR',
   components: {
+    Navigation,
+    WatchVideo,
   },
+  props: {
+  },
+  data: () => ({
+    // WebAR コンテンツの表示状態
+    //   Navigation  : トップ(ろっくんナビゲーション)
+    //   quiz  : メニュー(クイズに参加)
+    //   photo : メニュー(写真を撮る)
+    //   video : メニュー(よるマチ！を見る)
+    currentComponent: 'Navigation',
+  }),
   methods: {
+    initAR: function() {
+      let me = this;
+      // クリックイベントハンドラを登録
+      AFRAME.registerComponent('click-event', {
+        init: function () {
+          var button = this.el;
+          button.addEventListener('click', function() {
+            console.log('*** ', button.id, ' clicked');
+            if (button.id) {
+              me.changeComponent(button.id);
+            }
+          });
+        }
+      });
+      // クリックイベントハンドラを登録
+      AFRAME.registerComponent('video-play', {
+        init: function () {
+          var button = this.el;
+          button.addEventListener('click', function() {
+            console.log('*** play clicked');
+            var video = document.querySelector('#fireworks');
+            if (video) {
+              video.play();
+            }
+          });
+        }
+      });
+      // クリックイベントハンドラを登録
+      AFRAME.registerComponent('video-pause', {
+        init: function () {
+          var button = this.el;
+          button.addEventListener('click', function() {
+            console.log('*** pause clicked');
+            var video = document.querySelector('#fireworks');
+            if (video) {
+              video.pause();
+            }
+          });
+        }
+      });
+    },
+    // ARで表示するVueコンポーネントを変更する
+    changeComponent: function(componentName) {
+      this.currentComponent = componentName;
+    },
   },
   mounted () {
-    // [Workaround] <video> 要素から z-index を削除
+    // コンポーネント初期化時にARの初期化処理を行う
+    this.initAR();
+    // [Workaround] DOM のレンダリング後に <video> 要素から z-index を削除
     setTimeout(() =>
       {
         var arVideo = document.querySelector('#arjs-video');
@@ -91,6 +130,7 @@ export default {
       ,3000
     );
   },
+
   /**
    * [Workaround]
    *  概要   : Vue Router で A-Frame の Vue コンポーネントから離れてもカメラ+AR映像が表示されたままになる.

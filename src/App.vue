@@ -55,6 +55,8 @@ export default {
   name: 'App',
   components: {
   },
+  props: {
+  },
   data: () => ({
     drawer: false,
     menu: [
