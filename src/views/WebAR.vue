@@ -12,9 +12,15 @@
       <!-- a-assets: preload/cache するアセットの定義 -->
       <a-assets>
         <!-- ろっくん画像 -->
-        <img id="rockn" src="ar/rockn.png" />
-        <img id="play" src="ar/play.png" />
-        <img id="pause" src="ar/pause.png" />
+        <img
+          id="rockn"
+          src="ar/rockn.png">
+        <img
+          id="play"
+          src="ar/play.png">
+        <img
+          id="pause"
+          src="ar/pause.png">
         <!-- 花火動画 -->
         <video
           id="fireworks"

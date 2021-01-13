@@ -42,7 +42,11 @@
       app
       color="ITVBlue"
     >
-      <v-btn v-for="item in menu" :key="item.title" :to="{ path: item.to }">
+      <v-btn
+        v-for="item in menu"
+        :key="item.title"
+        :to="{ path: item.to }"
+      >
         <v-icon>{{ item.icon }}</v-icon>
       </v-btn>
     </v-bottom-navigation>
