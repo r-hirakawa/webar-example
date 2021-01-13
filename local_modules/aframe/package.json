@@ -1,0 +1,8 @@
+{
+  "name": "aframe",
+  "version": "1.0.4",
+  "private": true,
+  "license": "MIT",
+  "homepage": "https://aframe.io/releases/1.0.4/aframe.min.js",
+  "main": "index.js"
+}
