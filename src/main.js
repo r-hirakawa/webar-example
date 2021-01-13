@@ -17,7 +17,8 @@ Vue.config.ignoredElements = [
   'a-cursor',
   'a-image',
   'a-text',
-  'a-plane'
+  'a-plane',
+  'a-video',
 ];
 
 new Vue({

@@ -1,8 +1,9 @@
 <template>
   <div class="container">
+
     <a-scene
       vr-mode-ui="enabled: false;"
-      loading-screen="enabled: true;"
+      loading-screen="enabled: false;"
       arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
       embedded
       id="scene"
@@ -12,32 +13,24 @@
       <a-assets>
         <!-- ろっくん画像 -->
         <img id="rockn" src="ar/rockn.png" />
-        <img id="menu-quiz" src="ar/menu-quiz.gif" />
-        <img id="menu-take-photo" src="ar/menu-take-photo.gif" />
-        <img id="menu-watch-yorumachi" src="ar/menu-watch-yorumachi.gif" />
+        <img id="play" src="ar/play.png" />
+        <img id="pause" src="ar/pause.png" />
+        <!-- 花火動画 -->
+        <video
+          id="fireworks"
+          src="https://cdn.aframe.io/videos/fireworks.mp4"
+          preload="none"
+          loop="true"
+          crossOrigin="anonymous"
+          webkit-playsinline
+          playsinline
+        ></video>
       </a-assets>
 
       <!-- a-camera: 視点カーソル -->
       <a-camera>
         <a-cursor color="yellow"></a-cursor>
       </a-camera>
-
-      <!--
-        オブジェクトの座標: マーカーを地面に配置
-          x (-:左,   +:右)
-          y (-:下,   +:上)
-          z (-:手前, +:奥)
-
-        オブジェクトの座標: 壁に貼る(rotation="-90 0 0")
-          x (-:左,   +:右)
-          y (-:手前, +:奥)
-          z (-:上,   +:下)
-
-
-
-
-        cursor="fuse: false; rayOrigin: mouse;"
-      -->
 
       <!-- a-marker: マーカーを検知してオブジェクトをレンダリング -->
       <a-marker
@@ -46,87 +39,79 @@
         preset="custom"
         url="ar/marker.patt"
       >
-        <a-image
-          src="#rockn"
-          position="-1 0.2 -3"
-          scale="2 5 1"
-          rotation="-90 0 0"
-        ></a-image>
-
-        <a-text
-          value="やあ,ぼくろっくん!"
-          font="ar/noto-sans-cjk-jp-msdf.json"
-          font-image="ar/noto-sans-cjk-jp-msdf.png"
-          negate="false"
-          position="0.5 -0.1 -2.5"
-          scale="2 1 2"
-          rotation="-90 0 0"
-        >
-        </a-text>
-
-        <a-entity
-          id="button-quiz"
-          geometry="primitive: plane; height: 0.4; width: 3.2"
-          material="src: #menu-quiz"
-          position="2 0 -2"
-          rotation="-90 0 0"
-          click-event
-        ></a-entity>
-
-        <a-entity
-          id="button-take-photo"
-          geometry="primitive: plane; height: 0.4; width: 3.2"
-          material="src: #menu-take-photo"
-          position="2 0 -1.5"
-          rotation="-90 0 0"
-          click-event
-        ></a-entity>
-
-        <a-entity
-          id="button-watch-yorumachi"
-          geometry="primitive: plane; height: 0.4; width: 3.2"
-          material="src: #menu-watch-yorumachi"
-          position="2 0 -1"
-          rotation="-90 0 0"
-          click-event
-        ></a-entity>
-
+        <component :is="this.currentComponent"></component>
       </a-marker>
 
     </a-scene>
-
-    <!-- AR内UI-->
-    <div>
-      <a href="" id="screen-shot" title="ScreenShot"><i class="material-icons">photo_camera</i></a>
-    </div>
 
   </div>
 </template>
 
 <script>
+import Navigation from '../components/webar/Navigation.vue'
+import WatchVideo from '../components/webar/WatchVideo.vue'
+
 export default {
   name: 'WebAR',
   components: {
+    Navigation,
+    WatchVideo,
   },
+  props: {
+  },
+  data: () => ({
+    // WebAR コンテンツの表示状態
+    //   Navigation  : トップ(ろっくんナビゲーション)
+    //   quiz  : メニュー(クイズに参加)
+    //   photo : メニュー(写真を撮る)
+    //   video : メニュー(よるマチ！を見る)
+    currentComponent: 'Navigation',
+  }),
   methods: {
     initAR: function() {
+      let me = this;
       // クリックイベントハンドラを登録
       AFRAME.registerComponent('click-event', {
         init: function () {
           var button = this.el;
           button.addEventListener('click', function() {
             console.log('*** ', button.id, ' clicked');
+            if (button.id) {
+              me.changeComponent(button.id);
+            }
+          });
+        }
+      });
+      // クリックイベントハンドラを登録
+      AFRAME.registerComponent('video-play', {
+        init: function () {
+          var button = this.el;
+          button.addEventListener('click', function() {
+            console.log('*** play clicked');
+            var video = document.querySelector('#fireworks');
+            if (video) {
+              video.play();
+            }
+          });
+        }
+      });
+      // クリックイベントハンドラを登録
+      AFRAME.registerComponent('video-pause', {
+        init: function () {
+          var button = this.el;
+          button.addEventListener('click', function() {
+            console.log('*** pause clicked');
+            var video = document.querySelector('#fireworks');
+            if (video) {
+              video.pause();
+            }
           });
         }
       });
     },
-    // AR中のメニュー選択を処理する
-    handleMenuEvent: function(eventId) {
-
-      // 写真を撮る
-      if (eventId == 'button-take-photo') {
-
-      }
+    // ARで表示するVueコンポーネントを変更する
+    changeComponent: function(componentName) {
+      this.currentComponent = componentName;
     },
   },
   mounted () {
