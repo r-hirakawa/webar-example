@@ -69,6 +69,16 @@ export default {
   }),
   methods: {
     initAR: function() {
+
+      /**
+       * [Workaround]
+       *  概要   : CI環境で `'AFRAME' is not defined` エラーが発生する.
+       *  原因   : 未確認.
+       *  回避策 : AFRAMEをグローバル変数として宣言する.
+       * @see https://stackoverflow.com/questions/46254011/aframe-react-writing-new-component-error
+       */
+      const AFRAME = window.AFRAME;
+
       let me = this;
       // クリックイベントハンドラを登録
       AFRAME.registerComponent('click-event', {
