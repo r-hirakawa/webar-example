@@ -35,7 +35,14 @@
 
       <!-- a-camera: 視点カーソル -->
       <a-camera>
-        <a-cursor color="yellow"></a-cursor>
+        <a-entity
+          position="0 0 -1.0"
+          geometry="primitive: ring"
+          scale="0.01 0.01 0.01"
+          material="color: yellow; shader: flat"
+          cursor="fuse: true; fuseTimeout: 1000"
+          >
+        </a-entity>
       </a-camera>
 
       <!-- a-marker: マーカーを検知してオブジェクトをレンダリング -->
