@@ -31,5 +31,11 @@ module.exports = {
         },
       },
     ],
+    'no-irregular-whitespace': [
+      'error',
+      {
+        skipComments: true,
+      },
+    ],
   },
 };

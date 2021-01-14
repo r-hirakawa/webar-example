@@ -27,6 +27,13 @@ const routes = [
 ];
 
 const router = new VueRouter({
+  /**
+   * [Workaround]
+   *  概要   : GitHub Pages にデプロイすると Vue Router のリンク先が 404 Not Found となる.
+   *  原因   : Vue Router の base の既定値がドメインのルート直下へのデプロイを想定した設定になっている.
+   *  回避策 : vue.config.js で設定した publicPath に一致するよう process.env.BASE_URL を設定する.
+   */
+  base: process.env.BASE_URL,
   routes
 });
 
