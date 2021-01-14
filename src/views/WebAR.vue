@@ -41,6 +41,8 @@
           scale="0.01 0.01 0.01"
           material="color: yellow; shader: flat"
           cursor="fuse: true; fuseTimeout: 1000"
+          animation__fusing="startEvents: fusing; property: scale; dur: 1000; to: 0.005 0.005 0.005"
+          animation__complete="startEvents: click, mouseleave; property: scale; dur: 0; to: 0.01 0.01 0.01"
           >
         </a-entity>
       </a-camera>
