@@ -102,6 +102,13 @@ export default {
             if (button.id) {
               me.changeComponent(button.id);
             }
+
+            if (button.id == 'WatchVideo') {
+              var video = document.querySelector('#fireworks');
+              if (video) {
+                video.play();
+              }
+            }
           });
         }
       });
