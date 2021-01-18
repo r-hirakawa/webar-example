@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.e9b054678420771266ae8e426d916160.js"
+  "precache-manifest.ae20f3d13f9406128c4b7baa0dffaaa4.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "webar-vue-example"});
